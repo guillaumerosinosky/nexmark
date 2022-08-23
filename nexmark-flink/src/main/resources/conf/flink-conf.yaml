@@ -79,7 +79,7 @@ taskmanager.network.request-backoff.max: 300000
 #==============================================================================
 
 state.backend: rocksdb
-state.checkpoints.dir: file:///path/to/checkpoint
+state.checkpoints.dir: file:///tmp/checkpoints
 state.backend.rocksdb.localdir: /tmp
 state.backend.incremental: true
 execution.checkpointing.interval: 180000

@@ -105,7 +105,7 @@ public class AutoClosableProcess implements AutoCloseable {
 		}
 
 		public void runBlocking() throws IOException {
-			runBlocking(Duration.ofSeconds(30));
+			runBlocking(Duration.ofSeconds(120));
 		}
 
 		public void runBlocking(final Duration timeout) throws IOException {
