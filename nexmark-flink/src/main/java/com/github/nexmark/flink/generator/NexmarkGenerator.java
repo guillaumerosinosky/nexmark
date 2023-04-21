@@ -17,6 +17,10 @@
  */
 package com.github.nexmark.flink.generator;
 
+import com.github.nexmark.flink.FlinkNexmarkOptions;
+import com.github.nexmark.flink.utils.NexmarkGlobalConfiguration;
+import org.apache.commons.math3.random.MersenneTwister;
+import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.runtime.operators.windowing.TimestampedValue;
 
 import com.github.nexmark.flink.generator.model.AuctionGenerator;
@@ -29,6 +33,7 @@ import java.io.Serializable;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static org.apache.flink.util.Preconditions.checkNotNull;
 
@@ -121,7 +126,15 @@ public class NexmarkGenerator implements Iterator<TimestampedValue<Event>>, Seri
     this.eventsCountSoFar = eventsCountSoFar;
     this.wallclockBaseTime = wallclockBaseTime;
     // random generator
-    this.random = new Random();
+    Configuration nexmarkConf = NexmarkGlobalConfiguration.loadConfiguration();
+    String randomAlgo = nexmarkConf.get(FlinkNexmarkOptions.RANDOM_ALGORITHM);
+    if (randomAlgo.equals("LocalThreadRandom")) {
+        this.random = ThreadLocalRandom.current();
+    } else if(randomAlgo.equals("MersenneTwister")) {
+        this.random = new MersenneRandom();
+    } else {
+        this.random = new Random();
+    }
   }
 
   /** Create a fresh generator according to {@code config}. */
@@ -239,5 +252,20 @@ public class NexmarkGenerator implements Iterator<TimestampedValue<Event>>, Seri
     return String.format(
         "Generator{config:%s; eventsCountSoFar:%d; wallclockBaseTime:%d}",
         config, eventsCountSoFar, wallclockBaseTime);
+  }
+
+  public static class MersenneRandom extends Random {
+
+    MersenneTwister random = new MersenneTwister();
+
+    @Override
+    public int nextInt(){
+      return random.nextInt();
+    }
+
+    @Override
+    public int nextInt(int bound) {
+      return random.nextInt(bound);
+    }
   }
 }

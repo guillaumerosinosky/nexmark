@@ -72,4 +72,10 @@ public class FlinkNexmarkOptions {
 		.defaultValue(8081)
 		.withDescription("Flink REST port.");
 
+	public static final ConfigOption<String> RANDOM_ALGORITHM = ConfigOptions
+			.key("nexmark.random.algorithm")
+			.stringType()
+			.defaultValue("Random")
+			.withDescription("The random algorithm used.");
+
 }

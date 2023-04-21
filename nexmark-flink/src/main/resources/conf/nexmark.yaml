@@ -58,6 +58,7 @@ nexmark.workload.suite.100m.warmup.tps: 10000000
 nexmark.workload.suite.datagen.tps: 10000000
 nexmark.workload.suite.datagen.queries: "insert_kafka"
 nexmark.workload.suite.datagen.queries.cep: "insert_kafka"
+nexmark.random.algorithm: "LocalThreadRandom"
 
 #==============================================================================
 # Flink REST
