@@ -126,15 +126,7 @@ public class NexmarkGenerator implements Iterator<TimestampedValue<Event>>, Seri
     this.eventsCountSoFar = eventsCountSoFar;
     this.wallclockBaseTime = wallclockBaseTime;
     // random generator
-    Configuration nexmarkConf = NexmarkGlobalConfiguration.loadConfiguration();
-    String randomAlgo = nexmarkConf.get(FlinkNexmarkOptions.RANDOM_ALGORITHM);
-    if (randomAlgo.equals("LocalThreadRandom")) {
-        this.random = ThreadLocalRandom.current();
-    } else if(randomAlgo.equals("MersenneTwister")) {
-        this.random = new MersenneRandom();
-    } else {
-        this.random = new Random();
-    }
+    this.random = ThreadLocalRandom.current();
   }
 
   /** Create a fresh generator according to {@code config}. */
