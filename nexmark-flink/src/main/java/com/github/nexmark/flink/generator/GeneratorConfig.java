@@ -19,12 +19,12 @@ package com.github.nexmark.flink.generator;
 
 import com.github.nexmark.flink.model.Event;
 import com.github.nexmark.flink.NexmarkConfiguration;
+import com.github.nexmark.flink.random.MersenneTwisterRandom;
+import com.github.nexmark.flink.random.SFMTRandom;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 /** Parameters controlling how {@link NexmarkGenerator} synthesizes {@link Event} elements. */
 public class GeneratorConfig implements Serializable {
@@ -86,6 +86,8 @@ public class GeneratorConfig implements Serializable {
    */
   private final long eventsPerEpoch;
 
+  public String randomAlgorithm;
+
   public GeneratorConfig(
       NexmarkConfiguration configuration,
       long baseTime,
@@ -97,6 +99,8 @@ public class GeneratorConfig implements Serializable {
     this.personProportion = configuration.personProportion;
     this.bidProportion = configuration.bidProportion;
     this.totalProportion = this.auctionProportion + this.personProportion + this.bidProportion;
+
+    this.randomAlgorithm = configuration.randomAlgorithm;
 
     this.configuration = configuration;
 
@@ -237,6 +241,18 @@ public class GeneratorConfig implements Serializable {
     return firstEventNumber + numEvents;
   }
 
+  public Random getRandomAlgorithm() {
+    switch (randomAlgorithm) {
+      case "ThreadLocalRandom":
+        return ThreadLocalRandom.current();
+      case "MersenneTwister":
+        return new MersenneTwisterRandom();
+      case "SFMT":
+        return new SFMTRandom();
+      default:
+        return new Random();
+    }
+  }
   /**
    * Return the next event number for a generator which has so far emitted {@code numEvents}, but
    * adjusted to account for {@code outOfOrderGroupSize}.

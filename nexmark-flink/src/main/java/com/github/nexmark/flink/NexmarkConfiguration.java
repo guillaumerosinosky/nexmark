@@ -135,6 +135,10 @@ public class NexmarkConfiguration implements Serializable {
 	 */
 	@JsonProperty public long outOfOrderGroupSize = 1;
 
+	@JsonProperty public String randomAlgorithm = "Random";
+
+	@JsonProperty public boolean randomImproved = true;
+
 	/** Return full description as a string. */
 	@Override
 	public String toString() {

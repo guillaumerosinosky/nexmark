@@ -15,20 +15,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.nexmark.flink.generator.model;
+package com.github.nexmark.flink.generator.model.improved;
 
 import java.util.Random;
 
 /** Generates strings which are used for different field in other model objects. */
-public class StringsGenerator {
+public class StringsGeneratorImproved {
 
   /** Smallest random string size. */
   private static final int MIN_STRING_LENGTH = 3;
 
   /** Return a random string of up to {@code maxLength}. */
   public static String nextString(Random random, int maxLength) {
-    int len = MIN_STRING_LENGTH + random.nextInt(maxLength - MIN_STRING_LENGTH);
-    return nextExactString(random, len);
+    return nextString(random, maxLength, ' ');
   }
 
   public static String nextString(Random random, int maxLength, char special) {
